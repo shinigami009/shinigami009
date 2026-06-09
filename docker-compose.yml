@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: space-debris-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: space_debris
+      POSTGRES_USER: mission_control
+      POSTGRES_PASSWORD: mission_control
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mission_control -d space_debris"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
