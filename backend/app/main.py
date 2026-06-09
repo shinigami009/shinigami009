@@ -43,6 +43,23 @@ app.add_middleware(
 )
 
 
+@app.get("/")
+def root() -> dict[str, object]:
+    return {
+        "service": settings.app_name,
+        "status": "running",
+        "docs": "/docs",
+        "health": "/api/health",
+        "endpoints": [
+            "/api/assets",
+            "/api/risks",
+            "/api/predictions",
+            "/api/alerts",
+            "/api/analytics/debris",
+        ],
+    }
+
+
 @app.get("/api/health")
 def health() -> dict[str, str]:
     return {"status": "ok", "service": settings.app_name}

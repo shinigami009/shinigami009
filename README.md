@@ -55,7 +55,8 @@ uvicorn app.main:app --reload
 ```
 
 The API will be available at `http://localhost:8000`, with OpenAPI docs at
-`http://localhost:8000/docs`.
+`http://localhost:8000/docs`. Opening `http://localhost:8000/` returns a small
+service-status response with links to the main API routes.
 
 ## Run PostgreSQL
 
