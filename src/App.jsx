@@ -187,6 +187,34 @@ const riskPalette = {
   Critical: "#ff3f71",
 };
 
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function calculateOrbitLabelPosition(object, camera, size) {
+  const position = new THREE.Vector3();
+  object.updateWorldMatrix(true, false);
+  position.setFromMatrixPosition(object.matrixWorld).project(camera);
+
+  const x = (position.x * 0.5 + 0.5) * size.width;
+  const y = (-position.y * 0.5 + 0.5) * size.height;
+
+  if (size.width <= 1280) {
+    return [x, y];
+  }
+
+  // Keep the DOM label in the open globe viewport instead of drifting over panels.
+  const sidePanelWidth = Math.min(size.width * 0.28, 420);
+  const sideMargin = 18 + sidePanelWidth + 120;
+  const topMargin = 145;
+  const bottomMargin = 245;
+
+  return [
+    clamp(x, sideMargin, size.width - sideMargin),
+    clamp(y, topMargin, size.height - bottomMargin),
+  ];
+}
+
 const alertFeed = [
   {
     title: "ISS conjunction watch",
@@ -372,7 +400,11 @@ function TrackedObject({ asset, selected, onSelect }) {
           roughness={0.25}
         />
         {selected && (
-          <Html distanceFactor={8} position={[0.12, 0.12, 0]}>
+          <Html
+            distanceFactor={8}
+            position={[0.12, 0.12, 0]}
+            calculatePosition={calculateOrbitLabelPosition}
+          >
             <div className="orbit-label">
               <strong>{asset.name}</strong>
               <span>{asset.closestApproachKm.toFixed(2)} km approach</span>
