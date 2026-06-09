@@ -6,7 +6,6 @@ import {
   useTexture,
   Trail,
 } from "@react-three/drei";
-import Plot from "react-plotly.js";
 import {
   Activity,
   AlertTriangle,
@@ -23,8 +22,11 @@ import {
   Timer,
   Zap,
 } from "lucide-react";
+import PlotComponent from "react-plotly.js";
 import { Suspense, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+
+const Plot = PlotComponent.default ?? PlotComponent;
 
 const EARTH_TEXTURE =
   "https://threejs.org/examples/textures/land_ocean_ice_cloud_2048.jpg";
